@@ -1,0 +1,625 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created: Mon Jan  8 16:19:15 EST 2001 -->
+
+<html>
+
+<body bgcolor=white>
+
+<center>
+<h1>Stage #1 description</h1>
+</center>
+
+<h2>Objectives</h2>
+
+<p>This is stage #1 of the course project. The main concepts covered are: </p>
+
+<ul>
+<li>software development in a small team setting,</li>
+<li>development of a design for a medium-sized software project,</li>
+<li>building a suite of unit tests, and</li>
+<li>developing a simple, flexible and robust design through
+	appropriate use of design patterns.</li>
+</ul>
+
+<h2>Description</h2>
+
+<p> You have been employed by a small game manufacturer named
+<i>KnowSys</i>. This company has more programming talent than
+game-creation talent. Its developers create on-line versions of
+popular board games. Since the games this company develops cannot be
+exactly the same as the board games on which they're based, the games
+produced are always extended and changed in interesting ways (from a
+programming perspective). </p>
+
+<p>You have been assigned to a development team whose task is to
+design an on-line game similar to a very popular word game called
+Scrabble (TM of <i>Hasbro</i>). If you haven't played Scrabble you
+should try it - it's fun!  We're serious! If you haven't played
+Scrabble, get together with your team members on a Friday night and
+play. Consider it homework. You will have a much better understanding
+of the issues involved if you have played the game, even though this
+game differs in several important respects. </p>
+
+<blockquote>
+
+<h3>Description of pieces used to play</h3>
+
+<p>The game is played on a board with a with the following shape and
+size, a set of 400 letter tiles, and a tile rack for each player.
+
+<img src="Board.png">
+
+<p>Each
+tile has an (upper-case) letter from the English alphabet inscribed on
+it as well as a point value. The point values of the tiles, as well as
+quantity of each type of tile, is given in the table below:</p>
+
+<blockquote>
+<table border=0 cellspacing=3 cellpadding=0>
+ <tr bgcolor="#AAAAAA">
+  <th align="center">Letters</th>
+  <th align="center">Number of tiles for each letter</th>
+  <th align="center">Point value of each tile</th>
+ </tr>
+ <tr bgcolor="#AA88AA">
+  <td align="center">A, E, I, O, U</td>
+  <td align="center">29</td>
+  <td align="center">1</td>
+ </tr>
+ <tr bgcolor="#AA88AA">
+  <td align="center">Y</td>
+  <td align="center">15</td>
+  <td align="center">2</td>
+ </tr>
+ <tr bgcolor="#AA88AA">
+  <td align="center">B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Z</td>
+  <td align="center">12</td>
+  <td align="center">5</td>
+ </tr>
+</table>
+</blockquote>
+
+<p>The rows and columns of the board divide it into regions called
+<i>squares</i>. Note that a square is distinct from a tile.  A tile
+may be place on a square during game play. One of the squares is
+chosen at random to be the &quot;home square&quot;. </p>
+
+<h3>Preparing to play</h3>
+
+<p>Before the game begins each player is given twelve tiles from the
+inventory of 400 available tiles.  The tiles in the inventory are not
+visible to the players; tiles are selected randomly from the tile
+inventory.  Each player's tiles are kept in that player's tile rack.
+The tiles in a player's tile rack are visisble only to that player.
+The order of initial play is determined at random, but once determined
+is fixed for the rest of the game.</p>
+
+<h3>How to play</h3>
+
+<p>Players alternate turns trying to form words on the game
+board. Words may be formed horizontally (reading left to right) or
+vertically (reading top to bottom), but never diagonally. &nbsp; The
+first player to place a word must place one of the tiles of their word
+on the &quot;home square&quot;.  In subsequent turns the word which a
+player places on the board must intersect with or touch an existing
+word on the board. Examples are shown below.</p>
+
+<p>The word placed (which we&#8217;ll call the <i>primary</i> word) as
+well as any other words formed (which we&#8217;ll call
+<i>secondary</i> words) must be <i>valid</i> words.  In stage one any
+combination of letters is considered valid if:
+<ul>
+<li>it consists of at least two letters,
+<li>at least one of the letters is a vowel ('a', 'e', 'i', 'o', 'u' or 'y'), and 
+<li>at least one of the letters is not a vowel.
+</ul>
+In stage 2 a more refined notion of validity will be required.</p>
+
+<p>If at the end of a player&#8217;s turn they have less then twelve
+tiles they are given randomly selected tiles from the tile inventory
+to replenish their supply (so that they again have twelve tiles),
+assuming this is possible. If there aren&#8217;t enough tiles in the
+inventory to replenish a player&#8217;s supply they get all remaining
+tiles.  Once there are no tiles remaining, players continue the game
+with the tiles they have.</p>
+
+<p>If a player cannot, or does not wish to, place tiles on the board,
+they may pass their turn.</p>
+
+<p>The game ends if all players pass their turn in the same round,
+<i>or</i> if one player places all of his or her tiles on the board
+and there are no more tiles to pick up from the inventory (i.e. play
+ends if one player has no tiles in their tile rack).</p>
+
+<h3>Word placement examples</h3>
+
+<p>Here are some examples showing how words can be placed on the
+board. The first word must be placed over the &quot;home
+square&#8221;, either vertically or horizontally.  For example, if the
+first word played is &quot;dog&quot; it can go in any of the following
+ways. The &quot;home square&#8221; is the square with the green
+background.
+</p>
+
+<img src="BoardDogPlacements.png">
+
+<p>The following diagram shows a sequence of three board positions.
+The leftmost shows the board with the word "DOG" placed over the
+&quot;home square&#8221;.  The middle one shows the word "SAVE" placed
+so that the "S" adds on to the word "DOG" to form "DOGS".  The
+rightmost shows how a player might form the word &quot;old&quot; using the letters
+&quot;l&quot; and &quot;d&quot; from their own tiles and the
+&quot;o&quot; which is already on the board: </p>
+
+<img src="BoardTurnExamples.png">
+
+<p>Aside from the first word placed, every word put on the board must
+use a letter of an existing word (this is what player 3 did) or add a
+letter to an existing word to form a new word (this is what player 2
+did). </p>
+
+<p>Suppose now that player 4 wants to place the word
+&quot;gag&quot;. Assuming we are checking words for validity there is
+only one placement possible, shown leftmost in the next diagram.</p>
+
+<img src="BoardBadTurnExamples.png">
+
+<p>The other two placements are not permitted because for either
+placement the other letter combinations formed are not valid
+words.&nbsp; The first alternate placement (shown in the middle
+	  diagram) is not allowed since &quot;dgv&quot; is
+not a legal word. The second alternate placement (shown in the
+	  rightmost diagram) is
+not permitted because &quot;gg&quot; is not a valid word.</p>
+
+<h3>How to score</h3>
+
+<p>At the end of each turn the score for each word that the player
+created on the board by their tile placement is calculated and added
+to the player's overall score. The score for a word is the sum of the
+point values for each of the tiles that make up the word.</p>
+
+<blockquote>
+
+<h4>Scoring example #1</h4>
+
+Suppose the word &quot;DOG&quot; is the first word placed on the
+board, as in the placement example given above.&nbsp;
+Since
+<blockquote>
+<pre>
+D has a point value of 5
+O has a point value of 1
+G has a point value of 5
+</pre>
+</blockquote>
+<p>the score is 5 + 1 + 5 = 11. </p>
+
+<h4>Scoring example #2</h4>
+
+Suppose the word &quot;SAVE&quot; is the second word placed on
+the board, as in the placement example given above.&nbsp; Since two
+words were formed by the tile placement, &#8220;DOGS&#8221; and
+&#8220;SAVE&#8221;, both words are scored.&nbsp;
+Since
+<blockquote>
+<pre>
+D has a point value of 5
+O has a point value of 1
+G has a point value of 5
+S has a point value of 5
+</pre>
+</blockquote>
+<p>the score is 5 + 1 + 5 + 5 = 16, and since
+</p>
+<blockquote>
+<pre>
+S has a point value of 5
+A has a point value of 1
+V has a point value of 5
+E has a point value of 1
+</pre>
+</blockquote>
+<p>the score for &#8220;SAVE&#8221; is 5 +
+1 + 5 + 1 = 12. &nbsp;The total score
+for this turn is 16 + 12 = 28.</p>
+
+<h4>Scoring example #3</h4>
+
+Suppose the word &quot;OLD&quot; is the third word placed on the
+board, as in the placement example given above.&nbsp; Even though only
+two tiles were placed on the board by the player on their turn
+(&#8220;L&#8221; and &#8220;D&#8221;) they get points for all the
+tiles that are part of the word.&nbsp; Since
+<blockquote>
+<pre>
+O has a point value of 1
+L has a point value of 5
+D has a point value of 5
+</pre>
+</blockquote>
+<p>the score is 1 + 5 + 5 = 11. </p>
+
+</blockquote>
+
+<h3>How to win</h3>
+
+<p>The player who has the greatest number of points at
+the end of the game wins. </p>
+
+</blockquote>
+
+<h2>Stage 1 requirements</h2>
+
+<blockquote>
+<p>Please read the following requirements
+carefully!&nbsp; While the final game
+will require more functionality, the customer expects the following in the
+first release.</p>
+</blockquote>
+
+<blockquote>
+<h3>JUnit test <b>[20 points]</b></h3>
+
+<blockquote><p>The requirements for JUnit testing is described in more
+detail in the submission section, below.
+</p></blockquote>
+
+<h3>Functionality <b>[56 points total]</b></h3>
+
+<blockquote><p>The following functionality must be present in the
+system.&nbsp; Note that NO user interface is desired at
+this point.&nbsp; The following functionality must be verified via unit
+tests that you write.</p>
+
+<p>Game set-up <b>[20 points total]</b></p>
+
+<ul>
+<li><b>[2 points]</b> Players must register to play.</li>
+
+<li><b>[2 points]</b> Each player must have a name, a score, and a tile rack.</li>
+
+<li><b>[2 points]</b> At least two players are required to play a
+game.  If only one player is registered, the game cannot be
+started.</li>
+
+<li><b>[2 points]</b> Whenever two or more players are registered, the
+game may be started.</li>
+
+<li><b>[2 points]</b> Once the game has been started, no additional
+players can register.</li>
+
+<li><b>[2 points]</b> When the game is started, the order of play must
+be determined randomly.</li>
+
+<li><b>[2 points]</b> There must be a way to find out what the order
+of play is.</li>
+
+<li><b>[2 points]</b> When the game is started, players must be given
+their initial tiles, randomly selected from the tile inventory.</li>
+
+<li><b>[2 points]</b> When the game is started, the &#8220;home
+square&#8221; must be chosen at random.</li>
+
+<li><b>[2 points]</b> There must be a way to find out which square on
+the board is the &#8220;home square&#8221;.</li>
+
+</ul>
+
+<p>Game play <b>[30 points total]</b></p>
+
+<ul>
+<li><b>[2 points]</b> Players must be given an opportunity to play their turn in the
+order determined in the game set-up.</li>
+
+<li>A player must, during their turn, be able to access:</li>
+<ul>
+<li><b>[2 points]</b> the tiles in their own tile rack (but must
+	    <b>not</b> be able to access the tiles of any other
+	    player, nor the tiles in the tile inventory),</li>
+<li><b>[2 points]</b> the scores of all the players, and</li>
+<li><b>[2 points]</b> the current board configuration.</li>
+</ul>
+
+<li>On a player&#8217;s turn they must be able to:</li>
+<ul>
+<li><b>[2 points]</b> Place a tile from their tile rack onto an empty square of the
+board (they may do this as long as they have tiles remaining on their
+tile rack).</li>
+<li><b>[2 points]</b> Retract a tile from the board, which they placed onto the board on
+this turn, and return it to their tile rack (they may do this whenever
+there are tiles on the board which they placed during the current
+turn).</li>
+<li><b>[2 points]</b> Indicate completion of their turn (a player who wishes not to, or
+cannot, place any tiles on the board can indicate completion without
+having placed any tiles).</li>
+</ul>
+
+<li>A player will only be allowed to complete their turn if the tiles
+are placed on the board in a legal configuration:</li>
+<ul>
+<li><b>[2 points]</b> over the home square on the first
+	    <strike>turn</strike> placement of the game,</li>
+<li><b>[2 points]</b> connecting to an existing word on subsequent
+	    <strike>turns</strike> placements,</li>
+<li><b>[2 points]</b> all tiles placed must be in a straight line, and</li>
+<li><b>[2 points]</b> there can be no empty squares between any tiles placed on the
+board (though there can be squares with tiles placed in earlier turns).</li>
+</ul>
+
+<li><b>[2 points]</b> A player must <b>NOT</b> be able complete their
+turn unless every word formed is valid.</li>
+
+<li><b>[2 points]</b> Once a player has completed their turn all of the words they
+formed during that turn are scored, and the sum of the scores of all
+of the words is added to the player&#8217;s overall score.&nbsp;
+<li><b>[2 points]</b> Once a player has completed their turn a 
+player must receive new tiles from the tile supply, as described
+above.</li>
+<li><b>[2 points]</b> It must be possible to get the words, with their
+	  respective scores, that were played on the last turn.</li>
+</ul>
+
+<p>Game completion <b>[6 points total]</b></p>
+
+<ul>
+<li><b>[2 points]</b> Once the game is finished it must be possible to
+get the winning player (the player with the highest score).</li>
+<li><b>[2 points]</b> Once the game is finished it must be possible to
+get all of the players and their respective scores.</li>
+<li><b>[2 points]</b> Once the game is finished players can no longer
+play the game (i.e. place tiles on the board, etc).</li>
+</ul>
+</blockquote>
+
+<h3>Package naming <b>[4 points]</b></h3>
+
+<blockquote>
+
+<p>Your code must be placed in packages as appropriate.  None of your
+code may be in the default package.&nbsp; You must at a minimum have
+one package for your code (named <tt>code</tt>), and one package for
+your unit tests (named <tt>tests</tt>).  You may have sub-packages
+within these packages to help you organize your code.  You will have
+one package for your interfaces (named <tt>code.interfaces</tt>); we
+suggest another package for the code that implements the basic game
+model (named <tt>code.model</tt>).  You should introduce additional
+packages if you feel it would be helpful in understanding the
+structure of your code.</p>
+
+</blockquote>
+
+<h3>Code documentation <b>[10 points]</b></h3>
+
+<blockquote><p>You must document every class and every class member
+(method and variable) using Javadoc documentation comments. See the <a
+href="http://java.sun.com/javase/6/docs/technotes/guides/javadoc/index.html">Javadoc
+Technology page</a> for more information. See in particular the page
+<a
+href="http://java.sun.com/j2se/javadoc/writingdoccomments/index.html">How
+to Write Doc Comments for Javadoc</a>.</p>
+</blockquote>
+<h3>Technical guide <b>[10 points]</b></h3>
+
+<blockquote><p>You must submit a technical guide which
+describes the design of your project, testing that you have done, any required
+functionality which your project does not implement or does not implement
+properly, etc.&nbsp; The technical guide
+must be either a PDF or a Word document.</p>
+</blockquote>
+
+</blockquote>
+
+<h2>Teamwork guidelines</h2>
+
+<blockquote>
+
+<p>It is important that there is a roughly equal division of labor
+amongst teammates. It is completely unacceptable for one person to do
+most of the work. Given the structure of the program it is also most
+unlikely that this person will successfully complete the project.
+Teammates who are not doing work will receive a grade of 0 for the
+project.</p>
+
+<p>If you are having trouble with an unmotivated group member you
+should seek to solve the problem at the group level first. If this
+does not work, you must seek the aid of the instructor.</p>
+
+<h3>Team meetings</h3>
+
+<p>To help you manage your time, here are some do's and don'ts for
+	  recitation:
+<ul>
+<li>Do discuss</li>
+<ul>
+<li>accomplishments (goals met) since last meeting</li>
+<li>problems (goals not met) that have come up since last meeting</li>
+<li>goals for next meeting</li>
+<li>schedule for the next week for pairs to meet to pair program</li>
+</ul>
+
+<li><b>Do NOT even consider writing code during your recitation time
+unless you have done the above.</b>  Remember, your recitation time is the
+only time during the week when you are guaranteed to be able to get
+together as a team.  This time is precious - don't waste it.</li>
+
+<li>Do have someone take notes each meeting, and keep notes in your
+repository.  Each team <b>MUST</b> submit one set of meeting notes per
+week.</li>
+<blockquote>
+<b>Please also e-mail me a copy of your team meeting notes.  A good
+subject line to use is: "CSE 116 Team ? Notes For Week ?", where the
+first "?" is replaced by your team letter/digit, and the second "?" is
+replaced by the recitation week (as noted on your sign-in/sign-out
+sheet).  Note that this is the same information I want you to store in
+a file in the repository anyway (see below for naming convention), so
+there is not really any extra work invoved. </b>
+</blockquote>
+
+<li>Do compromise.</li>
+
+<li>Do NOT exclude team members - use all your team's resources.  Each
+team has people with different skill levels and talents.  Coding
+prowess is just one of many skills needed to complete this project.
+<b>When pairing, strong and weak coders should work together, and the
+weaker coder should drive more often than the stronger coder (to help
+them build their skills with the help of the stronger coder, who
+navigates for them).</b> Doing this will pay off big-time in stages
+two and three of the project!  Likewise, not doing this will cost you
+big-time in stages two and three of the project!</li>
+
+</ul>
+
+<h3>Team peer-evaluation mechanism</h3>
+
+<p>The project submission for a team is graded as a whole, but each
+team member receives an individual grade which is based on that
+submission grade. The procedure for calculating individual grades is
+described below. The procedure is based on an assessment of each team
+member's contribution to the overall project submission. To assess
+individual member's contributions we use a peer-based evaluation
+mechanism.
+
+<p>Submit, by e-mailing to &lt;alphonce@buffalo.edu&gt;, your peer
+evaluations for stage 1 of the team project.  You should submit after
+you make your stage 1 team submission, but no later than Friday, April
+11, 2014 at 10:00 PM (one hour after your stage 1 submission is due).
+
+<p>Use "CSE116 Peer Eval - cse-tXXX - stage 1" as the subject line,
+where XXX is replaced by your team number.  You must use this EXACT
+subject line.
+
+<p>In the body of the message, give your peer evaluations for your team 1 members (including yourself), according to the following format:
+<blockquote>
+<pre>
+&lt;team&gt;:&lt;stage&gt;:&lt;rater&gt;:&lt;ratee&gt;:&lt;rating&gt;:&lt;comments&gt;
+</pre>
+</blockquote>
+It is crucial that you follow this format EXACTLY - see examples below.
+
+<p>Evaluate each team member as follows:
+
+<blockquote>
+<pre>
+  + means they contributed more than the average team member
+  0 means they contributed about as much as the average team member
+  - means they contributed less than the average team member
+</pre>
+</blockquote>
+
+<p>Obviously not everyone on the team can get +, nor can everyone on
+the team get -. In the comments provide a justification of a score of
+"+" or "-".
+
+<p>For example, suppose my team is cse-t000 and my team members are
+alphonce (me), user1, user2, user3, user4:
+
+<blockquote>
+<pre>
+cse-t000:stage1:alphonce:user1:+:contributed significantly to the project
+cse-t000:stage1:alphonce:user2:-:hardly ever showed for meetings, did little work
+cse-t000:stage1:alphonce:user3:+:contributed significantly to the project
+cse-t000:stage1:alphonce:user4:+:did an average amount of work
+cse-t000:stage1:alphonce:alphonce:0:a little lazy, but got work done in the end
+</pre>
+</blockquote>
+
+<p>If you do not submit your peer evaluation by the deadline I will
+assume that your intent is to award everyone on your team a "0"
+(everyone contributed about the same).  LATE PEER EVALUATIONS WILL NOT
+BE CONSIDERED - IT IS YOUR RESPONSIBILITY TO GET THEM IN ON TIME.
+
+<p>You may include whatever comments you like about each team member -
+comments about what worked well and what didn't work are especially
+helpful - but keep the comments on the same line as the '+'/'0'/'-'
+evaluation (long lines are OK).  If you have questions, just ask.
+
+<p><i>Peer evaluations are submitted individually and are confidential
+&#8211; your teammates will NOT know how you rated them.  Likewise,
+you will NOT be told how they rated you.</i>
+
+<p>Your individual grade for the project can be affected your peer
+scores.  '0' grades do not impact your score.  Let <i>m</i> be the
+number of '+' scores less the number of '-' scores; your individual
+grade for the project is the team score for the project submission
+multiplied by (1+0.1<i>m</i>).  Thus, if you receive 3 '+' ratings,
+one '0' rating and one '-' rating your <i>m</i> score will be 2.  Your
+individual score will be 1.2 * your team score.  On the other hand if
+you receive no '+' ratings, one '0' rating, and 3 '-' ratings,
+your <i> score will be -3.  Your individual score will be 0.7 * your
+team score.
+</p>
+
+<p>Keep in mind that in extreme cases I reserve the right to ignore
+the peer evaluations and grade students based on their documented
+contribution to the project.</p>
+
+</blockquote>
+
+<h2>Team Submission</h2>
+<blockquote>
+
+As a team there are two submissions you are required to make for this
+	stage:
+<ul>
+<li>JUnit tests (20% of total stage 1 grade)</li>
+
+<blockquote>
+<p>Your team must submit a set of JUnit tests for the required
+functionality of stage 1.  Write tests against the interfaces in the
+lecture code repository, in the package <tt>code.interfaces</tt>.  In
+your stage 1 code, you must have classes which implement each of these
+interfaces.</p>
+
+<p><b>Due date:</b> on or before 9:00 PM on Friday, April 4, 2014.</p>
+
+</blockquote>
+
+<li>Complete stage submission (80% of total stage 1 grade)</li>
+<blockquote>
+<p>Each team must submit the following:
+<ul>
+
+<li>Source code, properly javadoc'ed (do NOT include .class files),
+together with <tt>.project</tt> and <tt>.classpath</tt> files, and any
+UML class diagrams you think may be useful for the graders.</li>
+
+<li>Technical guide, named <tt>TechnicalGuide.pdf</tt>.</li>
+
+<li>Team meeting notes from each team meeting.  The meeting notes must
+be stored in files named according to date of the meeting.  For
+example, the meeting notes from March 31 must be saved to a file name
+<tt>Notes-2014-03-31.txt</tt>.  E-mail these notes to your TA before
+the end of each recitation.</li>
+
+<li>JUnit tests (as described above).
+
+</ul>
+
+<p><b>Due date:</b> on or before 9:00 PM on Friday, April 11, 2014.</p>
+
+</blockquote>
+</ul>
+
+</blockquote>
+
+<h2>Individual Submission</h2>
+<blockquote>
+
+<p>Submit, by e-mailing to &lt;alphonce@buffalo.edu&gt;, your peer
+evaluations for stage 1 of the team project.  See detailed
+instructions above.
+
+<p><b>Due date:</b> no later than 10:00 PM on Friday, April 11, 2014.</p>
+
+</blockquote>
+</ul>
+
+</blockquote>
+
+<a name="credit"></a>
+<p>
+ 
+</body>
+</html>
+

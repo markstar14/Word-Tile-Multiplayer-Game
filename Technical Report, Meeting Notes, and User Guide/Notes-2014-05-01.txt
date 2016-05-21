@@ -1,0 +1,22 @@
+Dear Victoria and Professor Alphonce,
+
+The team meeting minutes for this week are as followed:
+
+-Kevin worked a lot on the GUI so to start we all looked at his work on it, and it looks great.
+
+-We then went over the new functionality that we all worked on in the last week. The random board is complete and there was progress on much of the rest of the requirements.
+
+-We talked about days and times that we could meet in the next week to work further on the project.
+
+-Word multipliers and word recognition with the dictionary are the stand out issues right now and we discussed ideas about how to work on them.
+
+-Attempted the safe/restore requirement so we looked at the work he had done and talked about the problems about with it.
+
+-The dictionary came up since the text file has no spaces on Joe's computer, so we talked about how to get around it.
+
+-We assigned ourselves tasks to work on over the weekend and Monday.
+
+-We decided to choose Tuesday as the next day to meet, and hopefully most of the work will be done. 
+
+Thanks,
+--Mark Starczewski Jr.

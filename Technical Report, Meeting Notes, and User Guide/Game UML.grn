@@ -1,0 +1,95 @@
+<uml>
+   <greenVersion="30100"/>
+   <type>
+      <name="=CSE-116 Team Project/src<code.model{GUI.java[GUI"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="19"/>
+      <y="225"/>
+   </type>
+   <type>
+      <name="=CSE-116 Team Project/src<code.model{Board.java[Board"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="1116"/>
+      <y="1"/>
+   </type>
+   <type>
+      <name="=CSE-116 Team Project/src<code.model{Tile.java[Tile"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="882"/>
+      <y="408"/>
+   </type>
+   <type>
+      <name="=CSE-116 Team Project/src<code.model{Game.java[Game"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="416"/>
+      <y="24"/>
+   </type>
+   <type>
+      <name="=CSE-116 Team Project/src<code.model{Player.java[Player"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="876"/>
+      <y="10"/>
+   </type>
+   <type>
+      <name="=CSE-116 Team Project/src<code.model{EndTurnEventHandler.java[EndTurnEventHandler"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="21"/>
+      <y="16"/>
+   </type>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=CSE-116 Team Project/src<code.model{EndTurnEventHandler.java[EndTurnEventHandler"/>
+      <targetType="=CSE-116 Team Project/src<code.model{Game.java[Game"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=CSE-116 Team Project/src<code.model{Game.java[Game"/>
+      <targetType="=CSE-116 Team Project/src<code.model{GUI.java[GUI"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=CSE-116 Team Project/src<code.model{GUI.java[GUI"/>
+      <targetType="=CSE-116 Team Project/src<code.model{EndTurnEventHandler.java[EndTurnEventHandler"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=CSE-116 Team Project/src<code.model{GUI.java[GUI"/>
+      <targetType="=CSE-116 Team Project/src<code.model{Game.java[Game"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyIPart"/>
+      <sourceType="=CSE-116 Team Project/src<code.model{Game.java[Game"/>
+      <targetType="=CSE-116 Team Project/src<code.model{Tile.java[Tile"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.dependency.DependencyLPart"/>
+      <sourceType="=CSE-116 Team Project/src<code.model{Game.java[Game"/>
+      <targetType="=CSE-116 Team Project/src<code.model{Player.java[Player"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=CSE-116 Team Project/src<code.model{Board.java[Board"/>
+      <targetType="=CSE-116 Team Project/src<code.model{Game.java[Game"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+</uml>
+

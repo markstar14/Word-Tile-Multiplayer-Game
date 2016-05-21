@@ -1,0 +1,735 @@
+package code.model;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
+
+
+
+import code.interfaces.IGame;
+
+/**
+ * The class for the Game class which implements the IGame interface. It mostly
+ * handles game setup and turn/game endings. It must be one of the first things
+ * created, along with at least two player, in order to start the game in its
+ * entirety.
+ * 
+ * @author Mark, Kevin, Du and Joe
+ * 
+ */
+
+public class Game implements IGame {
+
+	/**
+	 * _inventory - refers to the list of all tiles that are not either on the
+	 * board or in a player's tile rack 
+	 * 
+	 * _playerlist - the list of all registered
+	 * players 
+	 * 
+	 * _currentPlayer - the player object who can currently play the game and place/retract tiles
+	 * 
+	 * _gameStarted - the boolean informing the game that the game has started and the start method 
+	 * cannot be started again
+	 * 
+	 * _board - the board object that will be
+	 * created when the start method is successful 
+	 * 
+	 * _lastTurnWords - an arraylist that holds all words that were formed in the last turn
+	 * 
+	 * _randomizer - a random object used to randomize the player list
+	 * 
+	 * _turnsSkipped - an integer used to represent the number of turns that
+	 * have gone by without any tiles placed
+	 * 
+	 * _turnCounter - The integer used to keep track of what turn it is so the game knows whether a tile 
+	 * can be retracted from the board. It can only be retracted if it is attempted on the same turn that
+	 * it was placed
+	 * 
+	 * _scoreText - the string used in the GUI that informs the players of what the player scores currently
+	 * are, and whose turn it is.
+	 * 
+	 * _BR - the reference to an instance of a Buffered Reader for use during the restoration of a game
+	 */
+	private ArrayList<Tile> _inventory;
+	private ArrayList<Player> _playerList;
+	public Player _currentPlayer;
+	private boolean _gameStarted;
+	private Board _board;
+	private ArrayList<SimpleImmutableEntry<String, Integer>> _lastTurnWords;
+	private Random _randomizer = new Random();
+	private int _turnsSkipped;
+	private int _turnCounter;
+	private String _scoreText = "";
+	private BufferedReader _BR;
+	
+	private String _fileName;
+
+	/**
+	 * The constructor for the game which instantiates the tile inventory and
+	 * player list arraylists, populates the inventory with the appropriate
+	 * number of tiles, and sets the start attempts to 0
+	 */
+	public Game(String fileName) {
+		_fileName = fileName;
+		populateInventory();
+		_gameStarted = false;
+		_playerList = new ArrayList<Player>();
+	}
+
+	
+	/**
+	 * This method adds tiles to the inventory based on the number that need to
+	 * be added and the points for those letters. Many of the letters' point values differ from each other
+	 * and so it requires a for statement and many if statements to populate the inventory
+	 */
+	private void populateInventory() {
+		_inventory = new ArrayList<Tile>();
+		for (int i = 0; i<57; i++){
+			if(i < 2){
+				_inventory.add(new Tile("Z",8));
+				_inventory.add(new Tile("X",8));
+				_inventory.add(new Tile("J",8));
+				_inventory.add(new Tile("Q",8));
+			}
+			if(i<4){
+				_inventory.add(new Tile("K",7));
+			}
+			if(i<5){
+				_inventory.add(new Tile("V",7));
+			}
+			if(i<7){
+				_inventory.add(new Tile("B",7));
+			}
+			if(i<10){
+				_inventory.add(new Tile("P",7));
+				_inventory.add(new Tile("G",7));
+				_inventory.add(new Tile("Y",7));
+			}
+			if(i<11){
+				_inventory.add(new Tile("F",7));
+			}
+			if(i<12){
+				_inventory.add(new Tile("W",6));
+				_inventory.add(new Tile("M",6));
+			}
+			if(i<14){
+				_inventory.add(new Tile("U",6));
+				_inventory.add(new Tile("C",6));
+			}
+			if(i<20){
+				_inventory.add(new Tile("L",5));
+			}
+			if(i<21){
+				_inventory.add(new Tile("D",5));
+			}
+			if(i<30){
+				_inventory.add(new Tile("H",4));
+				_inventory.add(new Tile("R",4));
+			}
+			if(i<31){
+				_inventory.add(new Tile("S",4));
+			}
+			if(i<33){
+				_inventory.add(new Tile("N",4));
+			}
+			if(i<35){
+				_inventory.add(new Tile("I",4));
+			}
+			if(i<37){
+				_inventory.add(new Tile("O",3));
+			}
+			if(i<41){
+				_inventory.add(new Tile("A",3));
+			}
+			if(i<45){
+				_inventory.add(new Tile("T",2));
+			}
+			if(i<56){
+				_inventory.add(new Tile("E",1));
+			}
+			
+		}
+		Collections.shuffle(_inventory);
+	}
+	
+	/**
+	 * Accessor method to return the inventory holding all of the yet to be used tiles
+	 * 
+	 * @return _inventory - the ArrayList of tiles which holds all of the tiles that are not in the board or player racks
+	 */
+	public ArrayList<Tile> getInventory(){
+		return _inventory;
+	}
+
+	
+	/**
+	 * This method takes a player in and registers them in the system s long as
+	 * start has not been called yet
+	 
+	 * @param player - player object to be added to the player list
+	 * 
+	 * @return true if the game has not started yet, and false otherwise
+	 */
+	public boolean register(Player player) {
+		if (_gameStarted == false) {
+			_playerList.add(player);
+			return true;
+		}
+		return false;
+	}
+
+	
+	/**
+	 * Method to take the list of registered players and put them into a new
+	 * list in a random order. This is the order in which they will play the
+	 * game.
+	 */
+	public void randomizePlayerlist() {
+		ArrayList<Player> temp = new ArrayList<Player>();
+		while (_playerList.size() > 0) {
+			int index = _randomizer.nextInt(_playerList.size());
+			temp.add(_playerList.remove(index));
+		}
+		_playerList = temp;
+	}
+
+
+	/**
+	 * Accessor method to retrieve the list of players in the order in which
+	 * they are to play the game after start is called
+	 * 
+	 * @return the list of currently registered players
+	 */
+	public ArrayList<Player> orderOfPlay() {
+		return _playerList;
+	}
+
+	
+	/**
+	 * Method to return the score of a given, registered, player object.
+	 * 
+	 * @param player
+	 *            - the player whose score the method is to return
+	 * @return an integer representing the score of the given player object. It
+	 *         will return 0 if the player is not registered
+	 */
+	public int score(Player player) {
+		if (_playerList.contains(player)) {
+			return player.getScore();
+		} else {
+			return 0;
+		}
+	}
+
+	
+	/**
+	 * Method to start the game if there is at least two players registered and
+	 * if the game has not been started already It will create a new Board
+	 * object, randomize the player list into the new random
+	 * turn order, fill the tile racks of all of the players, creates a new window for each player
+	 * which includes a visual representation of the board, their tile rack, and a text window 
+	 * displaying relevant information. It also assigns the current player to the first player in the
+	 * list, sets the _gameStarted boolean to true, and sets the _turnCounter integer to 0.
+	 * 
+	 * @return true if there are at least two players and it has not started yet, false otherwise.
+	 */
+	public boolean start() {
+		if ((_gameStarted == false) && (_playerList.size() >= 2)) {
+			_board = new Board(_fileName);
+			randomizePlayerlist();
+			
+
+			_scoreText = ("The Game has started\n" + _scoreText);
+			for(int i=0; i<_playerList.size(); i++){
+				Player temp = _playerList.get(i);
+				fillRack(temp);
+				GUI _gameWindow = new GUI(this, temp.getRack(), temp.getName());
+				temp.setGameWindow(_gameWindow);
+			}
+			_currentPlayer = _playerList.get(0);
+			_scoreText = (_currentPlayer.getName() + " is the current player\n" 
+			+ _scoreText);
+			_currentPlayer.getGameWindow().updateScoreText();
+			_currentPlayer.getGameWindow().enableWindow();
+			_turnCounter = 0;
+			_gameStarted = true;
+			return true;
+		}
+		return false;
+	}
+
+	
+	
+	/**
+	 * Method to try and end the turn of a player. It will work if the player
+	 * has not placed any tiles or if all of the placed tiles formed valid words
+	 * on the board. Either way it will then assign the active player of the
+	 * board to the next player in the list and refill the tile rack of the last
+	 * player. It checks the validity of words through several methods which check the
+	 * tiles placed in the last turn by running down the line of tiles formed and checking 
+	 * for any other words that off shoot from the main formed word. It keeps track of all 
+	 * of these new words and then checks there validity, and if they are valid then it is 
+	 * scored and the points are given to the appropriate player. It then updates the user 
+	 * interface to show any changes made, such as the player's new score.
+	 * 
+	 * @return true if the player has placed no tiles or all words formed by
+	 *         their new tiles are valid, false otherwise
+	 */
+	public boolean endTurn() {
+		
+		for(int i=0; i<_playerList.size(); i++){
+			Player player = _playerList.get(i);
+			player.getGameWindow().updateRack();
+			player.getGameWindow().updateBoard();
+			player.getGameWindow().updateScoreText();
+		}
+		//check to see if any tiles were placed
+		//if not, than add to turns skipped and go to next player
+		//if the first player and all subsequent players skip, the game is ended
+		//the home square must have a tile to skip
+		if(_board.getGameBoard()[_board.homeSquareRow()-1][_board.homeSquareCol()-1].getTile() != null){
+			if(_board.numberOfTilesPlaced()==0){
+				_turnsSkipped = _turnsSkipped + 1;
+				if (_turnsSkipped == getNumberofPlayers()) {
+					endGame();
+				}
+				else{
+					nextPlayer();
+				}
+				return true;
+			}
+		}
+		//if the board has a legal configuration, we get all the new words and make 
+		//sure that these words are valid, then we get those word's points, add the 
+		//total points for all words to the players current score and set the 
+		//_lastTurnWords array list equal to the last turns words and return true
+		//return false otherwise
+		if(_board.legality(_turnCounter)==true){
+			_board.findWordsFormed();
+			if(_board.checkWords()==true){
+				_board.getWordPoints();	
+				int points = _board.getTotalPoints();
+				_currentPlayer.setScore(points);
+				_lastTurnWords = _board.getWordsandPoints();
+				fillRack(_currentPlayer);
+				
+				//check to see all players have tiles after 
+				//attempting to refill their rack, if not end game
+				for(int i=0; i<_playerList.size(); i++){
+					if(_playerList.get(i).getRack().size()==0){
+						endGame();
+						return false;
+					}
+				}
+				
+				_currentPlayer.getGameWindow().updateRack();
+				_currentPlayer.getGameWindow().updateBoard();
+				//SaveGame(createSaveString());
+				nextPlayer();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	
+	
+	/**
+	 * Method to end the game; it will set the active player on the board to
+	 * null and decide the winner with another method
+	 * 
+	 * @return true when the game ends and the winner is decided
+	 */
+	public boolean endGame() {
+		System.out.println("Ending Game");
+		for(int i=0; i<_playerList.size(); i++){
+			Player player = _playerList.get(i);
+			_scoreText = (player.getName() + " has " + player.getScore()
+					+ " points\n" + _scoreText);
+		}
+
+		_currentPlayer = null;
+		_gameStarted = false;
+		decideWinner();
+		for(int i=0; i<_playerList.size(); i++){
+			Player player = _playerList.get(i);
+			player.getGameWindow().updateRack();
+			player.getGameWindow().updateBoard();
+			player.getGameWindow().updateScoreText();
+		}
+		for(int i=0; i<_playerList.size(); i++){
+			Player player = _playerList.get(i);
+			player.getGameWindow().disableWindow();
+		}
+
+		return true;
+	}
+
+	
+	
+	/**
+	 * Method to move onto the next player in the player list at the end of a
+	 * turn. If the current player is in the last position of the list then it
+	 * will go back to the front of the list. It also updates the text window 
+	 * of the user interface to show the score of the last player while stating who
+	 * the new player is. It will reset the number of turns skipped if valid words 
+	 * were placed
+	 * 
+	 * @return true when the next player is selected and set to the active
+	 *         player of the board and false if the game has not started yet.
+	 */
+	public boolean nextPlayer() {
+		if(!_gameStarted){
+			return false;
+		}
+		_board.blankMultipliers();
+		_board.blankPlacedTilesList();
+		for(int i=0; i<_playerList.size(); i++){
+			Player player = _playerList.get(i);
+			player.getGameWindow().updateRack();
+			player.getGameWindow().updateBoard();
+		}
+		if (_playerList.indexOf(_currentPlayer) == _playerList.size() - 1) {
+			_turnsSkipped = 0;
+			_currentPlayer.getGameWindow().disableWindow();
+			_scoreText = (_currentPlayer.getName() + " has " + _currentPlayer.getScore()
+					+ " points\n" + _scoreText);
+			_currentPlayer.getGameWindow().updateScoreText();
+			_currentPlayer = _playerList.get(0);
+			_turnCounter++;
+			_scoreText = (_currentPlayer.getName() + " is the current player\n" 
+			+ _scoreText);
+			_currentPlayer.getGameWindow().enableWindow();
+			_currentPlayer.getGameWindow().updateBoard();
+			_currentPlayer.getGameWindow().updateScoreText();
+			return true;
+		} else {
+			_currentPlayer.getGameWindow().disableWindow();
+			_scoreText = (_currentPlayer.getName() + " has " + _currentPlayer.getScore()
+					+ " points\n" + _scoreText);
+			_currentPlayer.getGameWindow().updateScoreText();
+			_currentPlayer = _playerList.get(_playerList.indexOf(_currentPlayer) + 1);
+			_turnCounter++;
+			_scoreText = (_currentPlayer.getName() + " is the current player\n" 
+			+ _scoreText);
+			_currentPlayer.getGameWindow().enableWindow();
+			_currentPlayer.getGameWindow().updateBoard();
+			_currentPlayer.getGameWindow().updateScoreText();
+			return true;
+		}
+	}
+
+	
+	/**
+	 * Accessor method to return the arraylist of words played in the previous
+	 * turn and their scores in a the form of Simple Immutable Entries
+	 */
+	public ArrayList<SimpleImmutableEntry<String, Integer>> lastTurnWordScores() {
+		return _lastTurnWords;
+	}
+
+	
+	/**
+	 * /* This method fills the rack to the maximum of 12 tiles or if they need
+	 * more tiles than they can receive give them all tiles left in inventory
+	 * 
+	 * @param player
+	 *            reference to the player who's rack is going to be filled
+	 */
+	public void fillRack(Player player) {
+		int randomIndex;
+		ArrayList<Tile> _temprack = player.getRack();
+
+		/*
+		 * based on how many tiles are in the rack already this loop will add in
+		 * missing tiles from inventory to get the amount in the rack back to 12
+		 * 
+		 * We do not need to keep track of the size before after or during the
+		 * loop because the value of _temprack.size() changes as we add values
+		 * 
+		 * we also want to make sure that there are still tiles in the inventory
+		 * list, thus _inventory.size()>0
+		 */
+		while ((_temprack.size() < 12) && (_inventory.size() > 0)) {
+			randomIndex = _randomizer.nextInt(_inventory.size());
+			if (_inventory.get(randomIndex) != null) {
+				_temprack.add(_inventory.get(randomIndex));
+				_inventory.remove(randomIndex);
+			}
+		}
+		player.setRack(_temprack);
+
+	}
+
+	
+	/**
+	 * This Method traverses the list of players, and records the Player and
+	 * score of the one with the highest score. Should a player later on in the
+	 * list have a higher score value, they and their score will be recorded. At
+	 * the end, the winning player will be returned and their name will be printed out.
+	 * 
+	 * @return The winning Player
+	 */
+	public Player decideWinner() {
+		int highScore = 0;
+		Player winner = new Player();
+		
+		for (int i = 0; i < _playerList.size(); i++) {
+			int score = _playerList.get(i).getScore();
+			if (score > highScore) {
+				winner = _playerList.get(i);
+				highScore = score;
+			}
+		}
+		_scoreText = "The winner is " + winner.getName() + ", with "
+				+ winner.getScore() + " points!\n" + _scoreText;
+		return winner;
+	}
+
+	
+	/**
+	 * This method goes through the list and displays the player at each index
+	 * and then displays the associated score. It also outputs the list of
+	 * players.
+	 * 
+	 * @return ArrayList<Player>
+	 * 
+	 */
+	public ArrayList<Player> playersScores() {
+		for (int i = 0; i < _playerList.size(); i++) {
+			System.out.println(_playerList.get(i).getName() + " had "
+					+ _playerList.get(i).getScore() + " points!");
+		}
+		return _playerList;
+	}
+
+	
+	/**
+	 * Accessor method to return the size of the list of registered players
+	 * 
+	 * @return an integer representing the number of registered players
+	 */
+	public int getNumberofPlayers() {
+		return _playerList.size();
+	}
+
+	
+	
+	/**
+	 * This method returns the current player for the game
+	 * 
+	 * @return - current player of the game
+	 */
+	public Player getCurrentPlayer(){
+		return _currentPlayer;
+	}
+	
+	
+	/**
+	 * This method returns the game board that is interacting with the Game object
+	 * 
+	 * @return - the board
+	 */
+	public Board getBoard(){
+		return _board;
+	}
+	
+	
+	/**
+	 * Accessor method for the text that is meant to appear in the text window of the user interface
+	 * 
+	 * @return the string containing all of te text for the GUI's text window
+	 */
+	public String getScoreText(){
+		return _scoreText;
+	}
+	
+	
+	
+	/**
+	 * Mutator Method used for laying down the board. This may or may not be implemented, but is 
+	 * created for the purpose of testing.
+	 * 
+	 * @param a premade Board
+	 */
+	public void layBoard(Board board){
+		_board = board;
+	}
+	
+	
+	/**
+	 * Method to create a string representation of the current status of the game. Including the source 
+	 * of the dictionary, the players, their tile racks, and their scores in the appropriate playing order
+	 * and a representation of the board given by a method  fund in the Board's class.
+	 * 
+	 * @return a string representing the current status of the game, its players, and the board
+	 */
+	public String createSaveString(){
+		String save = "-d /projects/CSE116/words ";
+		 int progress = 0;
+		 int currentPlayerIndex = _playerList.indexOf(_currentPlayer);
+		 while(progress != _playerList.size()){
+			 progress ++;
+			 save = save + "-p " + _playerList.get(currentPlayerIndex).getName() + " ";
+			 for(int i = 0; i < _playerList.get(currentPlayerIndex).getRack().size(); i++){
+				 save = save + " " + _playerList.get(currentPlayerIndex).getRack().get(i).getLetter();
+			 }
+			 save = save + " " + _playerList.get(currentPlayerIndex).getScore() + " ";
+			currentPlayerIndex++;  
+		 }
+		 save = save + _board.toString();
+		 System.out.println(save);
+		 return save;
+	}
+	
+	
+	/**
+	 * Method to create a saved text file within a folder found within the project folder for the whole
+	 * project. It overwrites the current saved string and replaces it with the string formed from the
+	 * previous method
+	 * 
+	 * @param save
+	 */
+	public void SaveGame(String save){
+		Writer writer = null;
+		try {
+		    writer = new BufferedWriter(new OutputStreamWriter(
+		          new FileOutputStream("SavedGame/SavedGame.txt")));
+		    writer.write(save);
+		} catch (IOException ex) {
+		} finally {
+		   try {writer.close();} catch (Exception ex) {}
+		}
+	}
+	
+	/**
+	 * Method to retrieve the saved game information saved in the text file within the project. 
+	 * It uses a BufferedReader to read the file and return the single string found within it.
+	 * 
+	 * @return the string found in the saved game file which holds the information needed to restore a game
+	 */
+	public String AccessSave(){
+		String SavedGameInfo = "";
+		
+		try {
+			String line = "";
+			_BR = new BufferedReader(new FileReader("SavedGame/SavedGame.txt"));
+			while ((line = _BR.readLine()) != null) {
+				SavedGameInfo = line;
+//				System.out.println(SavedGameInfo);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (_BR != null)_BR.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return SavedGameInfo;
+	}
+	
+	
+	//In my theory, this should get to the point of registering the 
+	//players with the game, adding the correct names, adding their tiles,
+	//and setting their scores. I haven't even touched the board yet.
+	//It won't seem to go past case 1 though and I don't know why
+	public void restoreGame(){
+		String saved = AccessSave();
+		System.out.println(saved);
+		String Player = "";
+		String score = "";
+		int blank = 0;
+		int state = 0;
+		Player tempPlayer = new Player();
+		for(int i = 0; i < saved.length(); i++){
+			Character temp = saved.charAt(i);
+			
+			switch(state){
+			case 0:System.out.print(temp);
+				
+				if(temp.equals('-')){
+					
+					state = 1;
+				}
+				if(temp.equals('[')){
+					state = 4;
+				}
+				break;
+			case 1:
+				
+				if(temp.equals('d')){
+					
+					state = 2;
+				}
+				else if(temp.equals('p')){
+					
+					state = 3;
+				}
+				break;
+			case 2:
+				if(temp.equals('-')){
+					
+					state = 1;
+				}
+				break;
+			case 3:
+				if((temp.equals(' '))||(blank == 0)){
+					blank = 1;
+					state = 3;
+				}
+				else if((temp.equals(' '))||(blank == 1)){
+					blank = 2;
+					tempPlayer.setName(Player);
+					
+					Player = "";
+					state = 3;
+				}
+				else if((temp.equals(' '))||(blank == 2)){
+					blank = 3;
+					state = 3;
+				}
+				else if((temp.equals(' '))||(blank ==3)){
+					Integer playerScore = Integer.valueOf(score);
+					tempPlayer.setScore(playerScore);
+					this.register(tempPlayer);
+					System.out.println(tempPlayer.getName());
+					tempPlayer = new Player();
+					state = 0;
+				}
+				else if(blank == 1){
+					Player = Player +temp;
+					state = 3;
+				}
+				else if(blank == 2){
+					String letter = ""+temp;
+					tempPlayer.getRack().add(new Tile(letter, 1));
+					state = 3;
+				}
+				else if(blank == 3){
+					score = score + temp;
+					state = 3;
+				}
+				else if((temp=='1')||(temp=='2')||(temp=='3')||(temp=='4')||(temp=='5')||(temp=='6')||(temp=='7')||(temp=='8')||(temp=='9')){
+					score = score + temp;
+					state = 3;
+				}
+				break;
+				
+			}
+			
+		}
+	}
+
+}

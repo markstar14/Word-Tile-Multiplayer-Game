@@ -1,0 +1,26 @@
+Dear Professor Alphonce and Victoria,
+
+This weeks meeting went as followed:
+
+-Du attempted to make the corners of the board random, but he misunderstood what was needed. So we need to fix that.
+
+-He also worked on the random inventory, which seems to be correct.
+
+-Kevin altered many of the methods from stage 1 so it can work better with the new functionality. He used the white board to explain his logic and how the new word recognition methods work.
+
+-I brought up that he overwrote my place method which handled some of the old functionality, so I will have to redo that one. The functionality for some of the game ending criteria is gone now as well, so that will have to be added back.
+
+-We spent a lot of time going over how endTurn() works now that Kevin changed some of the code.
+
+-We asked Victoria about some confusion Joe had concerning valid words and ending a turn. 
+
+-We discussed what each of us want to do in the next week now that more of are free from other commitments.
+
+-We talked about the dictionary, since none of us have any idea how to get to it.
+
+We talked about the GUI and how it should be made, and checked with Victoria about some questions we had about it.
+
+-Assigned code for each of us do work on before the next class.
+
+Thanks,
+--Mark Starczewski Jr.
