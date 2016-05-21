@@ -1,0 +1,703 @@
+package tests;
+
+import static org.junit.Assert.assertTrue;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.AbstractMap.SimpleImmutableEntry;
+
+import org.junit.Test;
+
+import code.Game;
+import code.Player;
+import code.Square;
+import code.Tile;
+import code.model.Board;
+
+public class tests {
+	
+	private Board _b;
+	private Tile _t;
+	private Game _g;
+	
+	/*
+	 * Mark's tests for anything I get my hands on, including any methods I make to help out the other ones
+	 */
+	
+	@Test public void getLetterTest(){
+		_t = new Tile('A');
+		Character expected = 'A';
+		Character actual = _t.getLetter();
+		assertTrue( "The char was" + actual, actual == expected);
+	}
+	@Test public void getValueTest(){
+		_t = new Tile('A');
+		int expected = 1;
+		int actual = _t.getValue();
+		assertTrue( "The value was" + actual, actual == expected);
+	}
+	
+	@Test public void getValueTest3(){
+		_t = new Tile('M');
+		int expected = 3;
+		int actual = _t.getValue();
+		assertTrue( "The value was" + actual, actual == expected);
+	}
+	@Test public void getValueTest4(){
+		_t = new Tile('Y');
+		int expected = 2;
+		int actual = _t.getValue();
+		assertTrue( "The value was" + actual, actual == expected);
+	}
+	
+	
+	@Test public void inventoryTest(){
+		Game g = new Game();
+		//check the console to look at all the letters inside the inventory
+	}
+	
+	@Test public void rackTest(){
+		Player p = new Player("Mark");
+		
+		//check the console to look at all the letters inside the inventory
+	}
+	
+	//tests that the method can find the homesquare's row. The board makes a homesquare automatically
+	@Test public void homeSquareRowTest(){
+		_b = new Board();
+		int expected = _b.HSrow+1;
+		int actual = _b.homeSquareRow();
+		System.out.println(" row was "+actual);
+		assertTrue("The answer I got was"+actual, actual==expected);
+	}
+	
+	//Tests that the homesquare's row is random. This might fail if it randomly makes the same choice twice, but that is a small chance.
+	@Test public void homeSquareRowTest2(){
+		_b = new Board();
+		Board b2 = new Board();
+		int HS1 = _b.homeSquareRow();
+		int HS2 = b2.homeSquareRow();
+		assertTrue(" the first board's homeSquareRow was "+_b.homeSquareRow()+" and the 2nd board's homeSquareRow was "+b2.homeSquareRow(), HS1 !=HS2);
+	}
+
+	//Tests that the homesquare's row is random. This might fail if it randomly makes the same choice twice, but that is a small chance. This test is the same as the second but it exists in case the first one fails due to a random chance.
+	@Test public void homeSquareRowTest3(){
+		_b = new Board();
+		Board b2 = new Board();
+		int HS1 = _b.homeSquareRow();
+		int HS2 = b2.homeSquareRow();
+		assertTrue(" the first board's homeSquareRow was "+_b.homeSquareRow()+" and the 2nd board's homeSquareRow was "+b2.homeSquareRow(), HS1 !=HS2);
+	}
+
+	//tests if is actually making a random column for the homeSquare
+	@Test public void homeSquareColTest(){
+		_b = new Board();
+		int expected = _b.HScol+1;
+		int actual = _b.homeSquareCol();
+		System.out.println("col was "+actual);
+		assertTrue("The answer I got was "+actual, actual==expected);
+	}
+
+	//Tests that the homesquare's column is random. This might fail if it randomly makes the same choice twice, but that is a small chance. 
+	@Test public void homeSquareColTest2(){
+		_b = new Board();
+		Board b2 = new Board();
+		int HC1 = _b.homeSquareCol();
+		int HC2 = b2.homeSquareCol();
+		assertTrue(" the first board's homeSquareCol was "+_b.homeSquareCol()+" and the 2nd board's homeSquareCol was "+b2.homeSquareCol(), HC1 !=HC2);
+	}
+
+	//Tests that the homesquare's column is random. This might fail if it randomly makes the same choice twice, but that is a small chance. This test is the same as the second but it exists in case the first one fails due to a random chance.
+	@Test public void homeSquareColTest3(){
+		_b = new Board();
+		Board b2 = new Board();
+		int HC1 = _b.homeSquareCol();
+		int HC2 = b2.homeSquareCol();
+		assertTrue(" the first board's homeSquareCol was "+_b.homeSquareCol()+" and the 2nd board's homeSquareCol was "+b2.homeSquareCol(), HC1 !=HC2);
+	}
+
+	//Tests placing a tile on an empty square on the board
+	@Test public void placeTest(){
+		_b = new Board();
+		Tile t = new Tile('M');
+		boolean expected =true;
+		boolean actual = _b.place(t,1,1);
+		//		System.out.println(_b._b[1][1].getLetter());
+		assertTrue("the answer I got was " +_b.place(t,1,1), actual==expected);
+	}
+	
+	//tests getting a tile from a square
+	@Test public void getTest(){
+		_b = new Board();
+		Tile t = new Tile('A');
+		_b._b[1][1]= new Square(t);
+		Tile expected = t;
+		Tile actual = _b.get(1, 1);
+		assertTrue("the tile letter retreived was "+_b.get(1,1).getLetter(), actual == expected);
+	}
+	
+	//Tests trying to get a tile from a square that does not contain a tile
+	@Test public void getTest2(){
+		_b = new Board();
+		Tile expected = null;
+		Tile actual = _b.get(1, 1);
+		assertTrue("The answer was not null", actual == expected);
+	}
+	
+	//tests trying to get a tile from an area off of the board, in this case I tried the top right corner of the board that is meant to be blank
+	@Test public void getTest3(){
+		_b = new Board();
+		Tile expected = null;
+		Tile actual = _b.get(1, 19);
+		assertTrue("The answer was not null", actual == expected);
+	}
+	
+	//Tests placing a column in a spot that is not on the board; meaning the empty corner
+	@Test public void placeTest2(){
+		_b = new Board();
+		Tile t = new Tile('M');
+		boolean expected =false;
+		boolean actual = _b.place(t,1,19);
+		//		System.out.println(_b._b[1][1].getLetter());
+		assertTrue("the answer I got was " +_b.place(t,1,1), actual==expected);
+	}
+	
+	//Tests placing a tile on a square that already contains a tile
+	@Test public void placeTest3(){
+		_b = new Board();
+		Tile t = new Tile('M');
+		Tile t2 = new Tile('G');
+		_b.place(t2, 1, 1);
+		boolean expected =false;
+		boolean actual = _b.place(t,1,1);
+		//		System.out.println(_b._b[1][1].getLetter());
+		assertTrue("the answer I got was " +_b.place(t,1,1), actual==expected);
+	}
+
+	//tests retracting a tile from a square that does contain a tile to retract
+	@Test public void retractTest(){
+		_b = new Board();
+		_b._b[1][1]= new Square(new Tile('M'));
+		boolean expected = true;
+		boolean actual = _b.retract(_b._b[1][1].getTile());
+		assertTrue(" The answer i got was "+_b.retract(_b._b[1][1].getTile()), actual == expected);	  
+	}
+	
+	//tests trying to retract a tile from a square that does not contain a tile
+	@Test public void retractTest2(){
+		_b = new Board();
+		boolean expected = false;
+		boolean actual = _b.retract(_b._b[0][1].getTile());
+		assertTrue(" The answer i got was "+_b.retract(_b._b[1][1].getTile()), actual == expected);	  
+	}
+	
+	//tests trying to call retract on a square that does not exist, as in it is off the board in one of the blank corners, but I can't get it to work properly and return false
+	@Test public void retractTest3(){
+		_b = new Board();
+		boolean expected = false;
+		Tile t = _b.get(1, 19);
+		boolean actual = _b.retract(t);
+//		System.out.println(_b._b[1][19].getTile());
+		assertTrue("", actual == expected);	  
+	}
+	
+	//tests a square with a tile on it
+	@Test public void isEmptyTest(){
+		_b = new Board();
+		_b._b[14][14]= new Square(new Tile('A')); 
+		boolean expected = false;
+		boolean actual = _b.isEmpty(14, 14);
+		assertTrue("The Tile has the letter "+_b._b[14][14].getTile().getLetter()+_b.isEmpty(14, 14), actual == expected);
+	}
+	
+	//tests a square with no tile, so it should be empty
+	@Test public void isEmptyTest2(){
+		_b = new Board();
+		boolean expected = true;
+		boolean actual = _b.isEmpty(1, 1);
+		assertTrue("it was returned "+_b.isEmpty(1, 1), actual == expected);
+	}
+	
+	//tests a spot in one of the blank corners of the board with no tile or square on it
+	@Test public void isEmptyTest3(){
+		_b = new Board();
+		boolean expected = false;
+		boolean actual = _b.isEmpty(19, 1);
+		assertTrue("wrong",actual==expected);
+	}
+	
+	//tests a board filled with the same type of tile
+	@Test public void boardconfigTest(){
+		_b = new Board();
+		for(int row = 0; row<_b._b.length;row = row+1 ){
+			for(int col = 0; col<_b._b[row].length; col=col+1){
+				_b.place(new Tile('A'), row, col);
+			}
+		}
+		String expected = "AAAAAAAAAAAAAA      "+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAA      "+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAA      "+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAA      "+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAA      "+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAA      "+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "AAAAAAAAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "      AAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "      AAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "      AAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "      AAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "      AAAAAAAAAAAAAA"+System.getProperty("line.separator")+
+						  "      AAAAAAAAAAAAAA"+System.getProperty("line.separator");
+		String actual = _b.boardConfiguration();
+//		System.out.println("this was expected "+System.getProperty("line.separator")+expected);
+		assertTrue("The answer I got was"+ actual, actual.equals(expected));
+						
+	}
+	
+	//tests a board filled with no tiles
+	@Test public void boardconfigTest2(){
+		_b = new Board();
+		String expected = "______________      "+System.getProperty("line.separator")+
+						  "______________      "+System.getProperty("line.separator")+
+						  "______________      "+System.getProperty("line.separator")+
+						  "______________      "+System.getProperty("line.separator")+
+						  "______________      "+System.getProperty("line.separator")+
+						  "______________      "+System.getProperty("line.separator")+
+						  "____________________"+System.getProperty("line.separator")+
+						  "____________________"+System.getProperty("line.separator")+
+						  "____________________"+System.getProperty("line.separator")+
+						  "____________________"+System.getProperty("line.separator")+
+						  "____________________"+System.getProperty("line.separator")+
+						  "____________________"+System.getProperty("line.separator")+
+						  "____________________"+System.getProperty("line.separator")+
+						  "____________________"+System.getProperty("line.separator")+
+						  "      ______________"+System.getProperty("line.separator")+
+						  "      ______________"+System.getProperty("line.separator")+
+						  "      ______________"+System.getProperty("line.separator")+
+						  "      ______________"+System.getProperty("line.separator")+
+						  "      ______________"+System.getProperty("line.separator")+
+						  "      ______________"+System.getProperty("line.separator");
+		String actual = _b.boardConfiguration();
+//		System.out.println("The answer I expected was "+System.getProperty("line.separator")+expected);
+//		for (int c = 0; c < actual.length(); c++){
+//			if(actual.charAt(c) != expected.charAt(c)){
+//				assertTrue("the character at position " + c + "is " + actual.charAt(c) + " for actual "
+//						+ " and this " + expected.charAt(c)+ " for expected.",actual.charAt(c) == expected.charAt(c));
+//			}
+//		}
+		assertTrue("The answer I got was"+ actual, actual.equals(expected));				
+	}
+	
+	//tests a board filled various different tiles
+		@Test public void boardconfigTest3(){
+			_b = new Board();
+			for(int row = 0; row<10;row = row+1 ){
+				for(int col = 0; col<10; col=col+1){
+					_b.place(new Tile('M'), row, col);
+				}
+			}
+			for(int row = 10; row<_b._b.length;row = row+1 ){
+				for(int col = 0; col<10; col=col+1){
+					_b.place(new Tile('R'), row, col);
+				}
+			}
+			for(int row = 0; row<10;row = row+1 ){
+				for(int col = 10; col<_b._b[row].length; col=col+1){
+					_b.place(new Tile('A'), row, col);
+				}
+			}
+			for(int row = 10; row<_b._b.length;row = row+1 ){
+				for(int col = 10; col<_b._b[row].length; col=col+1){
+					_b.place(new Tile('K'), row, col);
+				}
+			}
+			String expected = "MMMMMMMMMMAAAA      "+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAA      "+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAA      "+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAA      "+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAA      "+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAA      "+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAAAAAAAA"+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAAAAAAAA"+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAAAAAAAA"+System.getProperty("line.separator")+
+							  "MMMMMMMMMMAAAAAAAAAA"+System.getProperty("line.separator")+
+							  "RRRRRRRRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "RRRRRRRRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "RRRRRRRRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "RRRRRRRRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "      RRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "      RRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "      RRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "      RRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "      RRRRKKKKKKKKKK"+System.getProperty("line.separator")+
+							  "      RRRRKKKKKKKKKK"+System.getProperty("line.separator");
+			String actual = _b.boardConfiguration();
+//		System.out.println("this was expected "+System.getProperty("line.separator")+expected);
+			assertTrue("The answer I got was"+ actual, actual.equals(expected));
+							
+		}
+	
+	//tests that there are the correct number of players in the list after the method is executed
+	@Test public void orderOfPlayTest(){
+		_g = new Game();
+		Player p1 = new Player("Harry");
+		Player p2 = new Player("Gin");
+		Player p3 = new Player("Luna");
+		_g._playerlist.add(p1);
+		_g._playerlist.add(p2);
+		_g._playerlist.add(p3);
+		_g.orderOfPlay();
+		assertTrue(""+_g._playerlist.size(), _g._playerlist.size()==3);
+	}
+	
+	//tests that it is randomized. this might fail every so often if it makes the new list in the same order as the original
+	@Test public void orderOfPlayTest2(){
+		_g = new Game();
+		Player p1 = new Player("Ron");
+		Player p2 = new Player("Herm");
+		Player p3 = new Player("Nev");
+		_g._playerlist.add(p1);
+		_g._playerlist.add(p2);
+		_g._playerlist.add(p3);
+		ArrayList<Player> original = _g._playerlist;
+		ArrayList<Player> actual = _g.orderOfPlay();
+		assertTrue("", original != actual);
+	}
+	
+	//testing to see if each player knows what turn they are supposed to go on and that they are different from each other
+	@Test public void orderOfPlayTest3(){
+		_g = new Game();
+		Player p1 = new Player("Victor");
+		Player p2 = new Player("Fleur");
+		Player p3 = new Player("Cedric");
+		_g._playerlist.add(p1);
+		_g._playerlist.add(p2);
+		_g._playerlist.add(p3);
+		_g.orderOfPlay();
+		int p1Turn = p1.getTurn();
+		int p2Turn = p2.getTurn();
+		int p3Turn = p3.getTurn();
+		assertTrue("player one is "+p1Turn+"player 2 is "+p2Turn+"player 3 is "+p3Turn, (p1Turn!=p2Turn)&&(p2Turn!=p3Turn)&&(p1Turn!=p3Turn));
+	}
+	
+	//basic test to get the score of a player that is registered to play and has no points yet
+	@Test public void scoreTest(){
+		_g = new Game();
+		Player p = new Player("Gin");
+		_g.register(p);
+		int expected = 0;
+		int actual = _g.score(p);
+		assertTrue("The score returned was "+_g.score(p),actual==expected);
+	}
+	
+	//tests a player who is registered and has points greater then zero
+	@Test public void scoreTest2(){
+		_g = new Game();
+		Player p = new Player("Lily");
+		_g.register(p);
+		p.alterScore(14);
+		int expected = 14;
+		int actual = _g.score(p);
+		assertTrue("The score returned was "+_g.score(p),actual==expected);
+	}
+	
+	//tests getting the score of a player that has not yet been registered to play
+	@Test public void scoreTest3(){
+		_g = new Game();
+		Player p = new Player("Molly");
+		int expected = 0;
+		int actual = _g.score(p);
+		assertTrue("The score returned was "+_g.score(p),actual==expected);
+	}
+	
+	//tests getting the score of a particular player among a group of players
+	@Test public void scoreTest4(){
+		_g = new Game();
+		Player p = new Player("James");
+		Player p2 = new Player("Sirius");
+		Player p3 = new Player("Remus");
+		_g.register(p); _g.register(p2); _g.register(p3);
+		p.alterScore(31); p2.alterScore(18); p3.alterScore(2);
+		int expected = 18;
+		int actual = _g.score(p2);
+		assertTrue("The score returned was "+_g.score(p),actual==expected);
+	}
+	
+	//Tests that the method works and the player was registered
+	@Test public void registerTest(){
+		_g = new Game();
+		Player p = new Player("Albus");
+		boolean actual = _g.register(p);
+		boolean expected = true;
+		assertTrue("",actual==expected);
+	}
+	
+	//tests that the registered player is added to the list of players
+	@Test public void registerTest2(){
+		_g = new Game();
+		Player p = new Player("Minerva");
+		 _g.register(p);
+		 boolean actual = _g._playerlist.contains(p);
+		boolean expected = true;
+		assertTrue("",actual==expected);
+	}
+	
+	//tests that the player is not in the list of registered players until they are registered
+		@Test public void registerTest3(){
+			_g = new Game();
+			Player p = new Player("Severus");
+			boolean actual1 = _g._playerlist.contains(p);
+			boolean expected1 = false;
+			_g.register(p);
+			boolean actual2 = _g._playerlist.contains(p);
+			boolean expected2 = _g._playerlist.contains(p);
+			assertTrue("",(actual1==expected1)&&(actual2==expected2));
+		}
+	
+		//testing my realWord() method so we can use it to see if a string of letters is a valid word according to the rules he gives. This is a real word
+		@Test public void realWord(){
+			_g = new Game();
+			String s = "PRINCE";
+			boolean expected = true;
+			boolean actual = _g.realWord(s);
+			assertTrue(""+_g.realWord(s),actual==expected);
+		}
+		
+		//this should be a valid word, even if it isn't a real word
+		@Test public void realWord2(){
+			_g = new Game();
+			String s = "FAWKES";
+			boolean expected = true;
+			boolean actual = _g.realWord(s);
+			assertTrue(""+_g.realWord(s),actual==expected);
+		}
+		
+		//this should not be a valid word according to the rules
+		@Test public void realWord3(){
+			_g = new Game();
+			String s = "A";
+			boolean expected = false;
+			boolean actual = _g.realWord(s);
+			assertTrue("",actual==expected);
+		}
+		
+		//this should be false since there is no word or even a letter
+		@Test public void realWord4(){
+			_g = new Game();
+			String s = " ";
+			boolean expected = false;
+			boolean actual = _g.realWord(s);
+			assertTrue("",actual==expected);
+		}
+		
+		//tests if the method will return true if there has been no placements of tiles remaining on the board
+		@Test public void endTurn(){
+			_g = new Game();
+			Player p1 = new Player("Lucius");
+			Player p2 = new Player("Draco");
+			_g.register(p1);
+			_g.register(p2);
+			_g.start();
+			boolean expected = true;
+			boolean actual = _g.endTurn();
+			assertTrue("", actual == expected);	
+		}
+		
+		//tests if you can end the turn with an invalid word placed
+		@Test public void endTurn2(){
+			_g = new Game();
+			Player p1 = new Player("Lucius");
+			Player p2 = new Player("Draco");
+			_g.register(p1);
+			_g.register(p2);
+			_g.start();
+			_g.getBoard().place(new Tile('A'),1,1);
+			boolean expected = false;
+			boolean actual = _g.endTurn();
+			assertTrue("", actual == expected);	
+		}
+		
+		//tests to see if you can end the turn with a valid word placed on the board
+		@Test public void endTurn3(){
+			_g = new Game();
+			Player p1 = new Player("Lucius");
+			Player p2 = new Player("Draco");
+			_g.register(p1);
+			_g.register(p2);
+			_g.start();
+			_g.getBoard().place(new Tile('T'),1,1);
+			_g.getBoard().place(new Tile('H'),1,2);
+			_g.getBoard().place(new Tile('E'),1,3);
+			boolean expected = true;
+			boolean actual = _g.endTurn();
+			assertTrue("", actual == expected);	
+		}
+		
+		//tests for a list with the words from the first turn of a game
+		@Test public void lastTurnWordScores(){
+			_g = new Game();
+			Player p1 = new Player("Belltrix");
+			Player p2 = new Player("Rudolphus");
+			_g.register(p1);
+			_g.register(p2);
+			_g.start();
+			_g.getBoard().place(new Tile('T'),1,1);
+			_g.getBoard().place(new Tile('H'),1,2);
+			_g.getBoard().place(new Tile('E'),1,3);
+			_g.endTurn();
+			ArrayList<SimpleImmutableEntry<String,Integer>> actual = _g.lastTurnWordScores();
+			ArrayList<SimpleImmutableEntry<String,Integer>> expected = new ArrayList<SimpleImmutableEntry<String,Integer>>();
+			AbstractMap.SimpleImmutableEntry<String, Integer> s = new SimpleImmutableEntry<String, Integer>("THE", 1);
+			expected.add(s);
+			System.out.println("expected" +expected);
+			assertTrue("", actual.equals(expected));
+		}
+		
+		//tests for a list of words from the second turn of the game. this should not have the word from the first turn
+		@Test public void lastTurnWordScores2(){
+			_g = new Game();
+			Player p1 = new Player("Godric");
+			Player p2 = new Player("Helena");
+			_g.register(p1);
+			_g.register(p2);
+			_g.start();
+			_g.getBoard().place(new Tile('T'),1,1);
+			_g.getBoard().place(new Tile('H'),1,2);
+			_g.getBoard().place(new Tile('E'),1,3);
+			_g.endTurn();
+			_g.getBoard().place(new Tile('I'),2,2);
+			_g.endTurn();
+			ArrayList<SimpleImmutableEntry<String,Integer>> actual = _g.lastTurnWordScores();
+			ArrayList<SimpleImmutableEntry<String,Integer>> expected = new ArrayList<SimpleImmutableEntry<String,Integer>>();
+			AbstractMap.SimpleImmutableEntry<String, Integer> s = new SimpleImmutableEntry<String, Integer>("HI", 1);
+			expected.add(s);
+			System.out.println("actual" +actual);
+			System.out.println("expected" +expected);
+			assertTrue("", actual.equals(expected));
+		}
+		
+		
+		
+	/*
+	 * Kevin Kijanka Tests for start() and endturn()
+	 */
+	
+	//Test that adds two players and should start
+	//Mark's note: the way I did it means you have to register the players first. Sorry, I'm trying to make it so just creating a new player will also register them, but it is being difficult
+	//by the way, why did you use != instead of == for the assertTrue? that means they shouldn't be equal, while == means they are equal. They work now! Thanks.
+	@Test public void startTest1(){
+		_g = new Game();
+		Player p1 = new Player("Harry");
+		Player p2 = new Player("Gin");
+		_g.register(p1);
+		_g.register(p2);
+		boolean expected = true;
+		boolean actual = _g.start();
+		assertTrue("the answer given was"+actual, expected==actual);
+		
+	}
+	
+	//Test that adds one player and should not start
+	@Test public void startTest2(){
+		_g = new Game();
+		Player p1 = new Player("Harry");
+		_g.register(p1);
+		boolean expected = false;
+		boolean actual = _g.start();
+		assertTrue(""+actual, expected==actual);
+		
+	}
+	
+	//Test that adds two players and starts, but we try to start again
+	@Test public void startTest3(){
+		_g = new Game();
+		Player p1 = new Player("Harry");
+		Player p2 = new Player("Larry");
+		_g.register(p1);
+		_g.register(p2);
+		_g.start();
+		boolean expected = false;
+		boolean actual = _g.start();
+		assertTrue(expected==actual);
+		
+	}
+	
+	@Test public void endTurnTest1(){
+		
+	}
+//
+	//Joe's Tests
+//
+	@Test public void hSDT00//homeScreenDuoTest00
+	(){code.interfaces.IBoard b=new code.model.Board();
+		int a=b.homeSquareCol();int z=b.homeSquareRow();
+	assertTrue("Error in configuring homeSquareDuo.",(a>=0 && a<=19)&&(z>=0 && a<=19));	
+	}
+	@Test public void hSRT00//homeScreenRowTest00
+	(){//There is only one necessary test for this method. This checks if the 
+		//home tile is placed as one of the valid tiles of the Row, from indexes 0-19
+		code.interfaces.IBoard b=new code.model.Board();
+		int a=b.homeSquareRow();
+		System.out.println("Row is "+a);
+		assertTrue("Error in configuring homeSquareRow",(a>=0 && a<20));
+	}
+	@Test public void hSCT00//homeScreenColumnTest00
+	(){//There is only one test necessary for this method.This checks if the 
+		//home tile is placed as one of the valid tiles of the Column, from indexes 0-19
+		code.interfaces.IBoard b=new code.model.Board();
+		int a=b.homeSquareCol();
+		System.out.println("Column is "+a);
+		assertTrue("Error in configuring homeSquareCol",(a>=0 && a<20));
+	}
+	//These methods test the values of the tiles, using the logic that the first tile should not equal the second
+	//unless it is the same tile, input as row1,col1,row2,col2. Since Failure is an expectation, boolean is also passed into 
+	//the helper method that checks the tile values.
+	@Test public void tGT00(){tGet(1,1,1,1,new Tile('a'),true);}
+	@Test public void tGT01(){tGet(1,5,1,5,new Tile('b'),true);}
+	@Test public void tGT02(){tGet(5,1,5,1,new Tile('c'),true);}
+	@Test public void tGT03(){tGet(1,22,1,22,new Tile('d'),false);}
+	@Test public void tGT04(){tGet(22,1,22,1,new Tile('e'),false);}
+	@Test public void tGT05(){tGet(22,22,22,22,new Tile('f'),false);}
+	@Test public void tGT06(){tGet(19,19,19,19,new Tile('g'),true);}
+	@Test public void tGT07(){tGet(1,16,1,16,new Tile('h'),false);}
+	@Test public void tGT08(){tGet(17,1,17,1,new Tile('i'),false);}
+	@Test public void tGT09(){tGet(1,1,2,2,new Tile('j'),false);}
+	@Test public void tGT10(){tGet(1,17,1,17,new Tile('k'),false);}
+	@Test public void tGT11(){tGet(0,0,0,0,new Tile('k'),true);}
+	@Test public void tGT12(){tGet(20,20,20,20,new Tile('l'),false);}
+	@Test public void tGTX1(){
+		int a=(int) (Math.random()*20);
+		System.out.println(a);
+		int b=(int) (Math.random()*20);
+		int c=(int) (Math.random()*20);
+		int d=(int) (Math.random()*20);
+		tGet(a,b,c,d,new Tile('x'),(a==c)&&(b==d));
+	}
+	@Test public void tGTX2(){
+	int b=(int) (Math.random()*20);
+	int c=(int) (Math.random()*20);
+	int d=(int) (Math.random()*20);
+	tGet(1,b,c,d,new Tile('x'),(1==c)&&(b==d));
+	}
+	@Test public void tGTX3(){
+	int b=(int) (Math.random()*20);
+	int d=(int) (Math.random()*20);
+	tGet(1,b,1,d,new Tile('x'),(b==d));
+	}
+	
+	public void tGet(int row1, int col1,int row2, int col2,Tile t,boolean c){//Helper for tGT(TileGetTests)
+		code.interfaces.IBoard b = new code.model.Board();
+		b.place(t, row1, col1);
+		Tile a = b.get(row2, col2);
+		boolean d = a==t;
+		assertTrue("I expected the Tile's value to be, "+t+" but the real value was "+a,d==c);
+	}
+}

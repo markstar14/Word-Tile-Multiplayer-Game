@@ -1,0 +1,5 @@
+
+Team Meeting Notes for Team t046For Week 4/10/2014
+Dear Professor Alphonce and Victoria,
+During this lab period we discussed possibilities for the user interface during the second stage since the actual coding for stage 1 is complete. I decided to elect myself to write the technical guide and those who wrote methods, Joe, Kevin and myself, will document the code in the appropriate classes. I will collect all of the emails for the meeting notes, add that to the project and will submit it tomorrow, hopefully many hours early.
+--Mark Starczewski Jr.

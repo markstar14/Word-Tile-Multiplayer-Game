@@ -1,0 +1,71 @@
+Game Rules:
+Two or more players must be registered to play the game. The goal of the game is to score more points than one's opponent. 
+A player collects points by placing words on the game board. Each letter has a different point value, so 
+the strategy is to play words with high scoring letter combinations.
+
+The Game Board:
+The game board consists of 20 by 20 squares, and it has two dead zones in the upper right and lower left corners. They take the form of 
+rectangles with dimensions between 2 and 8. The game tiles fit within each square of the Board.
+
+Game Tiles:
+The game is played with 496 tiles. All tiles contain letters and a point value that corresponds with that letter. 
+This value varies between letters according to the difficulty present in using the letter to form a valid word.
+Before the game begins each player is randomly given twelve tiles from the inventory of 496 available tiles. If, during gameplay, there is
+not enough tiles in the bag to meet their need, they will receive all of the remaining tiles.Each player 
+can only move the tiles within their own rack. 
+
+Tile values:
+1 point: E
+2 points: T
+3 points: A and O
+4 points: I , N , S , R , and H
+5 points: D and L
+6 points: C , U , M and W
+7 points: F , G , P , Y , B , V and K
+8 points: Q , J , X and Z
+
+
+Starting the game:
+The game is started by instantiating the Driver class which holds the main method with proper arguments. 
+The arguments must include the name of the player preceded by the tag "-p" and the exact location of the dictionary
+preceded by the tag "-d" this will permit the players to register with the game and create the proper dictionary for the game.
+
+Players alternate turns while trying to form words on the game board. Words may be formed horizontally or vertically 
+but never diagonally. The first player to place a word must place one of the tiles of their word on the home square.
+The home square is denoted by a plus sign in the user interface.
+
+The next player places a word on the board and must intersect with or touch an existing word on the board.
+Each word created must be a valid word according to the dictionary file given in the initial arguments.
+
+If at the end of a player's turn they have less then twelve tiles they are given randomly selected tiles from the
+tile inventory to replenish their supply.
+
+A player can only end their turn under two conditions. One is that they decided not to or could  not form a word on the board
+and opted to essentially skip their turn. The other scenario is that the player formed words on the board and the new words
+are valid words found in the dictionary. A turn will not end if the board contains invalid words. The first player of a game cannot 
+skip their turn and must place a tile onto the HomeSquare. Failure to do so will prevent them from ending their turn. If they are 
+truly unable to form a valid word upon their first turn then the game must be restarted and the players will try again with new 
+tiles in their racks.
+
+Placement is performed by simply clicking the tile in their rack adn then clicking the desired square on the Board,
+Retraction is performed by clicking the tile on the board that you wish to retract. It will only work if it is still the same
+turn in which the tile was placed. If it was the same turn then it is returned to the player's rack. Letter tiles that cannot be
+retracted are visually distinctive from those that can still be interacted with. To end a turn, a player just 
+clicks the button labeled "End Turn" and the method will be attempted. Once the player's turn ends they will be unable to interact with
+their user interface since only the current player's interface permits any actions performed upon it.
+
+Score:
+At the end of each turn the score for each word that the player created on the board by their tile placement is calculated 
+and added to the player's overall score. The score for a word is the sum of the point values for each of the tiles 
+that make up the word. The squares that the tiles are placed upon also contain letter and word multipliers which are taken into 
+consideration when scoring. Letter multipliers include: 2, 1, 0, and -1, while word multipliers include: 3,2,1, and 0.
+
+The End of Game
+The game ends if all players pass their turn in the same round. Or if one player places all of his or her tiles on the 
+board and there are no more tiles to pick up from the inventory.
+Once the game finishes, players can no longer play the game.
+The text screen next to the board is always displaying the most recent scores of the players and whose turn it is currently. This screen 
+will show who is the winner in the event that the game ends. 
+
+
+

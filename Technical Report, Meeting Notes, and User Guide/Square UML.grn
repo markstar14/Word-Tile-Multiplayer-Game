@@ -1,0 +1,25 @@
+<uml>
+   <greenVersion="30100"/>
+   <type>
+      <name="=CSE-116 Team Project/src<code.model{Tile.java[Tile"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="210"/>
+      <y="233"/>
+   </type>
+   <type>
+      <name="=CSE-116 Team Project/src<code.model{Square.java[Square"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="966"/>
+      <y="224"/>
+   </type>
+   <relationship>
+      <class="edu.buffalo.cse.green.relationship.association.AssociationPart"/>
+      <sourceType="=CSE-116 Team Project/src<code.model{Square.java[Square"/>
+      <targetType="=CSE-116 Team Project/src<code.model{Tile.java[Tile"/>
+      <bendpoints>
+      </bendpoints>
+   </relationship>
+</uml>
+
